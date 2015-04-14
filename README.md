@@ -14,9 +14,11 @@ and then execute:
 
     $ bundle
 
+<!--
 or install it yourself as:
 
     $ gem install jdepp
+-->
 
 ## usage
 
