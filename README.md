@@ -22,7 +22,7 @@ or install it yourself as:
 
 ## usage
 
-comprehensive documentation doesn't yet exist but for usage information, you can type `jdepp` without any options.
+documentation doesn't really exist yet but you can type `bundle exec jdepp` to see what documentation exists.
 
 ## contributing
 
