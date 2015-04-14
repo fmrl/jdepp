@@ -7,7 +7,7 @@ this is a small utility that scans source files for dependency declarations. cur
 add this line to your application's Gemfile:
 
 ```ruby
-gem 'jdepp'
+gem "jdepp", :git => "https://github.com/fmrl/jdepp.git"
 ```
 
 and then execute:
