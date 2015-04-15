@@ -2,12 +2,14 @@ require "jdepp/cli/feedback"
 require "jdepp/parser"
 
 require "optparse"
+require 'rbconfig'
 
 module Jdepp::CLI
 
    def self.cli(argv)
 
-      argv = ARGV
+      is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
+
       end_of_options = argv.index("--")
       output_to_stdout = end_of_options.nil?
       if not output_to_stdout then
@@ -65,6 +67,9 @@ module Jdepp::CLI
          end
       elsif not recipient.nil? then
          # todo: thread the exit status through
+         if is_windows then
+             result.map! {|s| if s.include? ' ' then '"%s"' % s else s end}
+         end
          opts[:feedback].system "#{recipient} #{result.join(' ')}"
       else
          $stderr.puts "i have nothing to do!"
