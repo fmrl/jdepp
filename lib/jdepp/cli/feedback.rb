@@ -8,7 +8,7 @@ module Jdepp
          attr_reader :enabled_tags
          attr_reader :output
 
-         def initialize(output=$stderr, enabled_tags=[])
+         def initialize(enabled_tags=[], output=$stderr)
             @enabled_tags = Set.new(enabled_tags)
             @output = output
          end
@@ -26,7 +26,7 @@ module Jdepp
          end
 
          def dry_run
-            add(:dry_run)
+            add_tag(:dry_run)
          end
 
          def verbose?
@@ -35,6 +35,22 @@ module Jdepp
 
          def verbose
             add_tag(:verbose)
+         end
+
+         def action?
+            @enabled_tags.member?(:action)
+         end
+
+         def action
+            add_tag(:action)
+         end
+
+         def quiet
+            preserve_dry = dry_run
+            @enabled_tags = Set.new
+            if preserve_dry then
+               dry_run
+            end
          end
 
          def puts_if(relevant_tags, &msg)
@@ -51,7 +67,7 @@ module Jdepp
          end
 
          def system(cmds)
-            puts_if([:dry_run, :verbose]) { cmds }
+            puts_if([:dry_run, :verbose, :action]) { cmds }
             if not self.dry_run? then
                Kernel::system(cmds)
             else

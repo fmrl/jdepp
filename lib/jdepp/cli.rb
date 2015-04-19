@@ -21,7 +21,7 @@ module Jdepp::CLI
          argv = ARGV.first(end_of_options)
       end
 
-      opts = {:feedback => Feedback.new, :locations => {}}
+      opts = {:feedback => Feedback.new([:action]), :locations => {}}
       OptionParser.new do 
          |o|
          o.banner = "usage: jdepp.rb [options] FILE [FILE ...] [-- COMMAND]"
@@ -35,6 +35,12 @@ module Jdepp::CLI
             |flag|
             if (flag) then
                opts[:feedback].add_tag(:dry_run)
+            end
+         end
+         o.on("-q", "--quiet", "i will suppress as much commentary as possible.") do
+            |flag|
+            if (flag) then
+               opts[:feedback].quiet
             end
          end
          o.on("-D", "--define=LOCATION", 'if provided with a specification of the form "PREFIX=PATH", i will substitute PREFIX: for PATH if encountered.') do
