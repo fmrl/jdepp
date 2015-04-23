@@ -8,11 +8,11 @@ module Jdepp::CLI
 
    def self.cli(argv)
 
-      is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
+      opts = {:feedback => Feedback.new([:action]), :locations => {}}
 
       end_of_options = argv.index("--")
-      output_to_stdout = end_of_options.nil?
-      if not output_to_stdout then
+      opts[:stdout] = end_of_options.nil?
+      if not opts[:stdout] then
          if argv.length > 0 then
             recipient = argv[end_of_options + 1..-1].join(" ")
          else
@@ -21,7 +21,6 @@ module Jdepp::CLI
          argv = ARGV.first(end_of_options)
       end
 
-      opts = {:feedback => Feedback.new([:action]), :locations => {}}
       OptionParser.new do 
          |o|
          o.banner = "usage: jdepp.rb [options] FILE [FILE ...] [-- COMMAND]"
@@ -57,7 +56,28 @@ module Jdepp::CLI
             |flag|
             opts[:append_dependents] = flag
          end
+         o.on("--[no-]trace", "i will show the ruby callstack should an exception occur.") do
+            |flag|
+            opts[:trace] = flag
+         end
       end.parse!(argv)
+
+      if opts.fetch(:trace, false) then
+         parse(argv, opts)
+      else
+         begin
+            parse(argv, opts)
+         rescue Exception => e
+            opts[:feedback].puts_if([:error]) {e.message}
+         end
+      end
+
+   end
+
+   private
+
+   def self.parse(argv, opts)
+      is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
 
       parser = Jdepp::Parser.new(opts[:locations], opts[:feedback])
       result = parser.parse(argv)
@@ -65,7 +85,7 @@ module Jdepp::CLI
          result.concat(argv)
       end
 
-      if output_to_stdout then
+      if opts[:stdout] then
          if result.length == 0 then
             $stderr.puts "i have an empty result-- is this what you intended?\n"
          else
@@ -80,7 +100,6 @@ module Jdepp::CLI
       else
          $stderr.puts "i have nothing to do!"
       end
-
    end
 
 end

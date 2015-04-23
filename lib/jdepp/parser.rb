@@ -28,8 +28,11 @@ module Jdepp
                         rel = @locations[loc_alias].join(matches[3])
                      else
                         # todo: convert path to relative path.
-                        raise "unspecified location alias \"#{loc_alias}\" encountered in <#{path}>."
+                        raise "i don't recognize the location alias \"#{loc_alias}\" encountered in <#{path}>."
                      end
+                  end
+                  if not rel.exist? then
+                     raise "i can't find #{rel.to_s} (required by #{path})."
                   end
                   abs = rel.realdirpath
                   if not a.key?(abs) then

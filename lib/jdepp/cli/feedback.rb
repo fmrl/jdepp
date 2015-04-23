@@ -9,7 +9,7 @@ module Jdepp
          attr_reader :output
 
          def initialize(enabled_tags=[], output=$stderr)
-            @enabled_tags = Set.new(enabled_tags)
+            @enabled_tags = Set.new([:error]) | enabled_tags
             @output = output
          end
 
@@ -47,7 +47,7 @@ module Jdepp
 
          def quiet
             preserve_dry = dry_run
-            @enabled_tags = Set.new
+            @enabled_tags = Set.new([:error])
             if preserve_dry then
                dry_run
             end
