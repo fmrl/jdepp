@@ -14,9 +14,7 @@ module Jdepp::CLI
       opts[:stdout] = end_of_options.nil?
       if not opts[:stdout] then
          if argv.length > 0 then
-            recipient = argv[end_of_options + 1..-1].join(" ")
-         else
-            recipient = nil
+            opts[:recipient] = argv[end_of_options + 1..-1].join(" ")
          end
          argv = ARGV.first(end_of_options)
       end
@@ -91,12 +89,12 @@ module Jdepp::CLI
          else
             puts result
          end
-      elsif not recipient.nil? then
+      elsif not opts.fetch(:recipient, nil).nil? then
          # todo: thread the exit status through
          if is_windows then
              result.map! {|s| if s.include? ' ' then '"%s"' % s else s end}
          end
-         opts[:feedback].system "#{recipient} #{result.join(' ')}"
+         opts[:feedback].system "#{opts[:recipient]} #{result.join(' ')}"
       else
          $stderr.puts "i have nothing to do!"
       end
