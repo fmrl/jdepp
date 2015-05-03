@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Jdepp::VERSION
   spec.authors       = ["michael lowell roberts"]
   spec.email         = ["mlr@fmrl.org"]
-  spec.summary       = %q{a language-independency scanner for build utilities.}
+  spec.summary       = %q{a language-independent scanner for build utilities.}
 #  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/fmrl/jdepp.git"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
