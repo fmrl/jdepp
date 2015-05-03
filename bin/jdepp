@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require "jdepp/cli"
-
-Jdepp::CLI::cli ARGV

@@ -1,4 +1,6 @@
 *.swp
+/bin/
+/_vendor/
 
 # provided by bundler
 /.bundle/
